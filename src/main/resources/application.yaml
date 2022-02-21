@@ -1,42 +1,42 @@
-spring.datasource:
-  url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-  username: sa
-  password: sa
-spring.h2.console.enabled: true
-camunda.bpm:
-  admin-user:
-    id: demo
-    password: demo
-    firstName: Demo
-    lastName: Demo
-  filter:
-    create: All Tasks
-  job-execution:
-    max-wait: 10000
-server.port: 8080
+#spring.datasource:
+#  url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#  username: sa
+#  password: sa
+#spring.h2.console.enabled: true
+#camunda.bpm:
+#  admin-user:
+#    id: demo
+#    password: demo
+#    firstName: Demo
+#    lastName: Demo
+#  filter:
+#    create: All Tasks
+#  job-execution:
+#    max-wait: 10000
+#server.port: 8080
 
 ## Comment above entirely and replace below for Postgres 
 ##    assuming DB is initialized with corresponding db, user, and credentials
 ##    ---  updates
-# camunda:
-#   admin-user:
-#     id: demo
-#     password: demo
-#   bpm:
-#     database:
-#       type: postgres
-#     table-prefix: camunda.
-#     schema-update: true
-# spring:
-#   main:
-#     allow-bean-definition-overriding: true
-#   jpa:
-#     properties:
-#       hibernate:
-#         dialect: org.hibernate.dialect.PostgreSQLDialect
-#   datasource:
-#     driverClassName: org.postgresql.Driver
-#     #DB connection:
-#     url: jdbc:postgresql://localhost:5432/camunda
-#     username: camundauser
-#     password: camundapass
+ camunda:
+   admin-user:
+     id: demo
+     password: demo
+   bpm:
+     database:
+       type: postgres
+     table-prefix: camunda.
+     schema-update: true
+ spring:
+   main:
+     allow-bean-definition-overriding: true
+   jpa:
+     properties:
+       hibernate:
+         dialect: org.hibernate.dialect.PostgreSQLDialect
+   datasource:
+     driverClassName: org.postgresql.Driver
+     #DB connection:
+     url: jdbc:postgresql://localhost:5432/camunda
+     username: camundauser
+     password: camundapass

@@ -6,6 +6,7 @@ import org.camunda.bpm.extension.junit5.test.ProcessEngineExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +19,9 @@ public class ProcessJUnitTest {
   @Deployment(resources = "TwitterQA.bpmn")
   public void testHappyPath() {
     // Create a HashMap to put in variables for the process instance
-    Map<String, Object> variables = new HashMap<String, Object>();
+    Map<String, Object> variables = new HashMap<>();
     variables.put("approved", true);
+    variables.put("content","Exercise 4 test - tojimoto: "+ LocalDateTime.now());
     // Start process with Java API and variables
     ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("TwitterQAProcess", variables);
     // Make assertions on the process instance
@@ -32,7 +34,7 @@ public class ProcessJUnitTest {
   @Deployment(resources = "TwitterQA.bpmn")
   public void testRejectPath() {
     // Create a HashMap to put in variables for the process instance
-    Map<String, Object> variables = new HashMap<String, Object>();
+    Map<String, Object> variables = new HashMap<>();
     variables.put("approved", false);
     // Start process with Java API and variables
     ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("TwitterQAProcess", variables);
