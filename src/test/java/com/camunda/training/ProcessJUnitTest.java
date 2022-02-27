@@ -17,7 +17,7 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 @ExtendWith(ProcessEngineCoverageExtension.class)
 public class ProcessJUnitTest {
-  private String content = "Exercise 5 - tojimoto: "+ LocalDateTime.now();
+  private String content = "Tojimoto: Junit Happy Test -"+ LocalDateTime.now();
 
   @Test
   @Deployment(resources = "TwitterQA.bpmn")

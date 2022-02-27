@@ -28,7 +28,10 @@
       <bpmn:outgoing>Flow_0vqhfpc</bpmn:outgoing>
       <bpmn:script>print("****Tweet Rejected");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:serviceTask id="Activity_Publish" name="Publish on Twitter" camunda:class="com.camunda.training.CreateTweetDelegate">
+    <bpmn:serviceTask id="Activity_Publish" name="Publish on Twitter" camunda:asyncBefore="true" camunda:class="com.camunda.training.CreateTweetDelegate4">
+      <bpmn:extensionElements>
+        <camunda:failedJobRetryTimeCycle>R4/PT5M</camunda:failedJobRetryTimeCycle>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0egtcia</bpmn:incoming>
       <bpmn:outgoing>Flow_1010zd2</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -41,11 +44,11 @@
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TwitterQAProcess">
       <bpmndi:BPMNEdge id="Flow_0vqhfpc_di" bpmnElement="Flow_0vqhfpc">
         <di:waypoint x="710" y="250" />
-        <di:waypoint x="882" y="250" />
+        <di:waypoint x="822" y="250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1010zd2_di" bpmnElement="Flow_1010zd2">
         <di:waypoint x="710" y="137" />
-        <di:waypoint x="882" y="137" />
+        <di:waypoint x="822" y="137" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ufphvr_di" bpmnElement="Flow_1ufphvr">
         <di:waypoint x="490" y="162" />
@@ -76,18 +79,6 @@
           <dc:Bounds x="158" y="162" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_00v1wnt_di" bpmnElement="Event_Handled">
-        <dc:Bounds x="882" y="119" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="864" y="82" width="74" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_143xo6e_di" bpmnElement="Event_Rejected">
-        <dc:Bounds x="882" y="232" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="863" y="275" width="76" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_04fucg2_di" bpmnElement="Gateway_Approval" isMarkerVisible="true">
         <dc:Bounds x="465" y="112" width="50" height="50" />
         <bpmndi:BPMNLabel>
@@ -102,6 +93,18 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ienlbe_di" bpmnElement="Activity_Review">
         <dc:Bounds x="270" y="97" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00v1wnt_di" bpmnElement="Event_Handled">
+        <dc:Bounds x="822" y="119" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="804" y="82" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_143xo6e_di" bpmnElement="Event_Rejected">
+        <dc:Bounds x="822" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="803" y="275" width="76" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
