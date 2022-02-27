@@ -28,10 +28,7 @@
       <bpmn:outgoing>Flow_0vqhfpc</bpmn:outgoing>
       <bpmn:script>print("****Tweet Rejected");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:serviceTask id="Activity_Publish" name="Publish on Twitter" camunda:asyncBefore="true" camunda:class="com.camunda.training.CreateTweetDelegate4">
-      <bpmn:extensionElements>
-        <camunda:failedJobRetryTimeCycle>R4/PT5M</camunda:failedJobRetryTimeCycle>
-      </bpmn:extensionElements>
+    <bpmn:serviceTask id="Activity_Publish" name="Publish on Twitter" camunda:asyncBefore="true" camunda:class="com.camunda.training.CreateTweetDelegate">
       <bpmn:incoming>Flow_0egtcia</bpmn:incoming>
       <bpmn:outgoing>Flow_1010zd2</bpmn:outgoing>
     </bpmn:serviceTask>

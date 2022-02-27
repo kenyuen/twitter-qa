@@ -1,5 +1,6 @@
 package com.camunda.training;
 
+import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.test.Deployment;
@@ -18,6 +19,7 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 @ExtendWith(ProcessEngineCoverageExtension.class)
 public class ProcessJUnitTest {
   private String content = "Tojimoto: Junit Happy Test -"+ LocalDateTime.now();
+//  private String content = "Network Error";
 
   @Test
   @Deployment(resources = "TwitterQA.bpmn")
@@ -45,6 +47,14 @@ public class ProcessJUnitTest {
     approvedMap.put("approved", true);
     approvedMap.put("content",content);
     taskService().complete(task.getId(), approvedMap);
+//    // Test asynch save point
+    List<Job> jobList = jobQuery()
+            .processInstanceId(processInstance.getId())
+            .list();
+    assertThat(jobList).hasSize(1);
+    Job job = jobList.get(0);
+    execute(job);
+
     // Ensure completion with appropriate path
     assertThat(processInstance)
             .hasPassedInOrder("Event_Started","Activity_Review","Gateway_Approval","Activity_Publish","Event_Handled")

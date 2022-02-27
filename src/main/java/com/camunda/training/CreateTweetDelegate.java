@@ -17,6 +17,11 @@ public class CreateTweetDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         String content = (String) delegateExecution.getVariable("content");
+
+        if (content.equals("Network error")) {
+            throw new RuntimeException("simulated network error");
+        }
+
         content = "Tojimoto: " + content + "-" + LocalDateTime.now();
         LOGGER.info("Publishing tweet: " + content);
         AccessToken accessToken = new AccessToken("220324559-CO8TfUmrcoCrvFHP4TacgToN5hLC8cMw4n2EwmHo", "WvVureFv5TBWTGhESgGe3fqZM7XbGMuyIhxB84zgcoUER");
