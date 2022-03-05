@@ -4,9 +4,14 @@ import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.test.Deployment;
+import org.camunda.bpm.engine.test.mock.Mocks;
 import org.camunda.bpm.extension.process_test_coverage.junit5.ProcessEngineCoverageExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -18,8 +23,19 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 @ExtendWith(ProcessEngineCoverageExtension.class)
 public class ProcessJUnitTest {
-  private String content = "Tojimoto: Junit Happy Test -"+ LocalDateTime.now();
+  private String content = "Junit Happy Test -"+ LocalDateTime.now();
 //  private String content = "Network Error";
+
+//  @Mock
+//  private TwitterService twitterService;
+//
+//  @BeforeEach
+//  public void setup() {
+//
+//    //MockitoAnnotations.initMocks(this);
+////    Mocks.register("createTweetDelegate", new CreateTweetDelegate(twitterService));
+//
+//  }
 
   @Test
   @Deployment(resources = "TwitterQA.bpmn")
@@ -59,6 +75,8 @@ public class ProcessJUnitTest {
     assertThat(processInstance)
             .hasPassedInOrder("Event_Started","Activity_Review","Gateway_Approval","Activity_Publish","Event_Handled")
             .isEnded();
+
+    //Mockito.verify(twitterService).tweet("")
   }
 
   @Test
@@ -76,5 +94,26 @@ public class ProcessJUnitTest {
     assertThat(processInstance)
             .hasPassedInOrder("Event_Started","Activity_Review","Gateway_Approval","Activity_Reject","Event_Rejected")
             .isEnded();
+  }
+
+  @Test
+  @Deployment(resources = "TwitterQA.bpmn")
+  public void testTweetRejected() {
+    Map<String, Object> varMap = new HashMap<>();
+    varMap.put("content", content);
+    varMap.put("approved",false);
+    // create process instance
+    ProcessInstance processInstance = runtimeService()
+            .createProcessInstanceByKey("TwitterQAProcess")
+            .setVariables(varMap)
+            .startAfterActivity((findId("Review Tweet")))
+            .execute();
+    // assert that it got rejected
+    assertThat(processInstance)
+            .isEnded()
+            // note the starting point where activity has started is NOT from the beginning
+            .hasPassedInOrder("Gateway_Approval","Activity_Reject","Event_Rejected")
+            .hasPassed((findId("Notify rejection")));
+
   }
 }
