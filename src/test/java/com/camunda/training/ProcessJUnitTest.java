@@ -40,6 +40,9 @@ public class ProcessJUnitTest {
   @Test
   @Deployment(resources = "TwitterQA.bpmn")
   public void testHappyPath() {
+    // Simple mock to bind the delegate
+    Mocks.register("createTweetDelegate", new CreateTweetDelegate());
+
     // Start process with Java API and variables
     Map<String, Object> variables = new HashMap<>();
     variables.put("content",content);
