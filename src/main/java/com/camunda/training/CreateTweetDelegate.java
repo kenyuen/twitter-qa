@@ -22,7 +22,7 @@ public class CreateTweetDelegate implements JavaDelegate {
             throw new RuntimeException("simulated network error");
         }
 
-        content = "Tojimoto: " + content + "-" + LocalDateTime.now();
+        content = "Tj: " + content + "-" + LocalDateTime.now();
         LOGGER.info("Publishing tweet: " + content);
         AccessToken accessToken = new AccessToken("220324559-CO8TfUmrcoCrvFHP4TacgToN5hLC8cMw4n2EwmHo", "WvVureFv5TBWTGhESgGe3fqZM7XbGMuyIhxB84zgcoUER");
         Twitter twitter = new TwitterFactory().getInstance();
