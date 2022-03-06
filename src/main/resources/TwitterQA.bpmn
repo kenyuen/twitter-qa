@@ -23,11 +23,6 @@
     <bpmn:sequenceFlow id="Flow_1ufphvr" name="No" sourceRef="Gateway_Approval" targetRef="Activity_Reject" />
     <bpmn:sequenceFlow id="Flow_1010zd2" sourceRef="Activity_Publish" targetRef="Event_Handled" />
     <bpmn:sequenceFlow id="Flow_0vqhfpc" sourceRef="Activity_Reject" targetRef="Event_Rejected" />
-    <bpmn:scriptTask id="Activity_Reject" name="Notify rejection" scriptFormat="Javascript">
-      <bpmn:incoming>Flow_1ufphvr</bpmn:incoming>
-      <bpmn:outgoing>Flow_0vqhfpc</bpmn:outgoing>
-      <bpmn:script>print("****Tweet Rejected");</bpmn:script>
-    </bpmn:scriptTask>
     <bpmn:serviceTask id="Activity_Publish" name="Publish on Twitter" camunda:asyncBefore="true" camunda:delegateExpression="${createTweetDelegate}">
       <bpmn:incoming>Flow_0egtcia</bpmn:incoming>
       <bpmn:outgoing>Flow_1010zd2</bpmn:outgoing>
@@ -36,6 +31,10 @@
       <bpmn:incoming>Flow_06hqnqp</bpmn:incoming>
       <bpmn:outgoing>Flow_14lvsw8</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_Reject" name="Notify rejection" camunda:type="external" camunda:topic="notification">
+      <bpmn:incoming>Flow_1ufphvr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0vqhfpc</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TwitterQAProcess">
@@ -94,14 +93,14 @@
           <dc:Bounds x="463" y="88" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ie30uq_di" bpmnElement="Activity_Reject">
-        <dc:Bounds x="610" y="210" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0k4vt80_di" bpmnElement="Activity_Publish">
         <dc:Bounds x="610" y="97" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ienlbe_di" bpmnElement="Activity_Review">
         <dc:Bounds x="270" y="97" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12338sb_di" bpmnElement="Activity_Reject">
+        <dc:Bounds x="610" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -93,6 +93,12 @@ public class ProcessJUnitTest {
     // get task and reject
     assertThat(processInstance).task().hasCandidateGroup("management").hasDefinitionKey("Activity_Review");
     complete(task(), withVariables("approved",false));
+    // Add external task handling
+    assertThat(processInstance)
+            .isWaitingAt(findId("Notify rejection"))
+            .externalTask()
+            .hasTopicName("notification");
+    complete(externalTask());
     // Make assertions on the process instance
     assertThat(processInstance)
             .hasPassedInOrder("Event_Started","Activity_Review","Gateway_Approval","Activity_Reject","Event_Rejected")
@@ -111,6 +117,12 @@ public class ProcessJUnitTest {
             .setVariables(varMap)
             .startAfterActivity((findId("Review Tweet")))
             .execute();
+    // Add external task handling
+    assertThat(processInstance)
+            .isWaitingAt(findId("Notify rejection"))
+            .externalTask()
+            .hasTopicName("notification");
+    complete(externalTask());
     // assert that it got rejected
     assertThat(processInstance)
             .isEnded()
