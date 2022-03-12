@@ -37,14 +37,14 @@
       <bpmn:outgoing>Flow_0vqhfpc</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0tyq4fo" sourceRef="StartEvent" targetRef="Activity_Publish" />
-    <bpmn:boundaryEvent id="Event_0t1e9lu" name="Tweet withdrawn" attachedToRef="Activity_Review">
+    <bpmn:boundaryEvent id="Event_Withdraw" name="Tweet withdrawn" attachedToRef="Activity_Review">
       <bpmn:outgoing>Flow_1872ji8</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_181u8j0" messageRef="Message_0xk4mih" />
     </bpmn:boundaryEvent>
-    <bpmn:endEvent id="Event_0q34fz3" name="Tweet Withdrawn">
+    <bpmn:endEvent id="Event_Withdrawn" name="Tweet Withdrawn">
       <bpmn:incoming>Flow_1872ji8</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1872ji8" sourceRef="Event_0t1e9lu" targetRef="Event_0q34fz3" />
+    <bpmn:sequenceFlow id="Flow_1872ji8" sourceRef="Event_Withdraw" targetRef="Event_Withdrawn" />
     <bpmn:startEvent id="StartEvent" name="Tweet by Superuser">
       <bpmn:outgoing>Flow_0tyq4fo</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0w38nz7" messageRef="Message_126nagp" />
@@ -55,6 +55,15 @@
   <bpmn:message id="Message_0xk4mih" name="tweetWithdrawn" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TwitterQAProcess">
+      <bpmndi:BPMNEdge id="Flow_1872ji8_di" bpmnElement="Flow_1872ji8">
+        <di:waypoint x="320" y="295" />
+        <di:waypoint x="320" y="510" />
+        <di:waypoint x="822" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tyq4fo_di" bpmnElement="Flow_0tyq4fo">
+        <di:waypoint x="215" y="110" />
+        <di:waypoint x="600" y="110" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0vqhfpc_di" bpmnElement="Flow_0vqhfpc">
         <di:waypoint x="710" y="350" />
         <di:waypoint x="822" y="350" />
@@ -87,19 +96,16 @@
         <di:waypoint x="215" y="237" />
         <di:waypoint x="270" y="237" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tyq4fo_di" bpmnElement="Flow_0tyq4fo">
-        <di:waypoint x="215" y="110" />
-        <di:waypoint x="600" y="110" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1872ji8_di" bpmnElement="Flow_1872ji8">
-        <di:waypoint x="320" y="295" />
-        <di:waypoint x="320" y="510" />
-        <di:waypoint x="822" y="510" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Event_Started">
         <dc:Bounds x="179" y="219" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="158" y="262" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00v1wnt_di" bpmnElement="Event_Handled">
+        <dc:Bounds x="822" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="804" y="85" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_143xo6e_di" bpmnElement="Event_Rejected">
@@ -114,22 +120,16 @@
           <dc:Bounds x="525" y="230" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k4vt80_di" bpmnElement="Activity_Publish">
+        <dc:Bounds x="600" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ienlbe_di" bpmnElement="Activity_Review">
         <dc:Bounds x="270" y="197" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_12338sb_di" bpmnElement="Activity_Reject">
         <dc:Bounds x="610" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0k4vt80_di" bpmnElement="Activity_Publish">
-        <dc:Bounds x="600" y="100" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_00v1wnt_di" bpmnElement="Event_Handled">
-        <dc:Bounds x="822" y="122" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="804" y="85" width="74" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0q34fz3_di" bpmnElement="Event_0q34fz3">
+      <bpmndi:BPMNShape id="Event_0q34fz3_di" bpmnElement="Event_Withdrawn">
         <dc:Bounds x="822" y="492" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="798" y="535" width="85" height="14" />
@@ -141,7 +141,7 @@
           <dc:Bounds x="172" y="135" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_10iwe5r_di" bpmnElement="Event_0t1e9lu">
+      <bpmndi:BPMNShape id="Event_10iwe5r_di" bpmnElement="Event_Withdraw">
         <dc:Bounds x="302" y="259" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="279" y="302" width="82" height="14" />

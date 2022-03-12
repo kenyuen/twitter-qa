@@ -6,12 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 
 // Check me on twitter here: https://twitter.com/cmnda_demo
 @Component("createTweetDelegate")
 public class CreateTweetDelegate implements JavaDelegate {
     private final Logger LOGGER = LoggerFactory.getLogger(CreateTweetDelegate.class.getName());
+
+    private TwitterService twitterService;
+
+    @Inject
+    public CreateTweetDelegate(TwitterService twitterService) {
+        this.twitterService=twitterService;
+    }
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
