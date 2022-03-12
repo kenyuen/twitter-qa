@@ -34,8 +34,9 @@ public class ProcessJUnitTest {
 
     @Test
     @Deployment(resources = "TwitterQA.bpmn")
-    public void testHappyPath() {
+    public void testHappyPath() throws Exception {
         // Simple mock to bind the delegate
+        MockitoAnnotations.initMocks(this);
         Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
 
         // Start process with Java API and variables
@@ -129,7 +130,7 @@ public class ProcessJUnitTest {
 
     @Test
     @Deployment(resources = "TwitterQA.bpmn")
-    public void testSuperUserTweet() {
+    public void testSuperUserTweet() throws Exception {
         // Simple mock to bind the delegate
         Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
 
@@ -157,7 +158,7 @@ public class ProcessJUnitTest {
 
     @Test
     @Deployment(resources = "TwitterQA.bpmn")
-    public void tweetWithdrawn() {
+    public void tweetWithdrawn() throws Exception {
         // Simple mock to bind the delegate
         Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
 
