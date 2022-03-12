@@ -1,5 +1,6 @@
 package com.camunda.training;
 
+import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
 import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -33,35 +34,21 @@ public class ProcessJUnitTest {
     private TwitterService mockTwitterService;
 
     @Test
-    @Deployment(resources = "TwitterQA.bpmn")
-    public void testHappyPath() {
+    @Deployment(resources = {"TwitterQA.bpmn", "tweetApproval.dmn"})
+    public void testHappyPath() throws Exception {
         // Simple mock to bind the delegate
+        MockitoAnnotations.initMocks(this);
         Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
 
         // Start process with Java API and variables
         Map<String, Object> variables = new HashMap<>();
         variables.put("content", content);
+        variables.put("email", "approved@mail.com");
         ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("TwitterQAProcess", variables);
         // Make assertions on the process instance
         assertThat(processInstance)
-                .isWaitingAt("Activity_Review");
-        // Get task lists in management group.
-        List<Task> taskList = taskService()
-                .createTaskQuery()
-                .taskCandidateGroup("management")
-                .processInstanceId(processInstance.getId())
-                .list();
-        // should only have on item
-        assertThat(taskList).isNotNull();
-        assertThat(taskList).hasSize(1);
-        // get task
-        Task task = taskList.get(0);
-        // Complete task
-        Map<String, Object> approvedMap = new HashMap<>();
-        approvedMap.put("approved", true);
-        approvedMap.put("content", content);
-        taskService().complete(task.getId(), approvedMap);
-//    // Test asynch save point
+                .isWaitingAt("Activity_Publish");
+        // Test asynch save point
         List<Job> jobList = jobQuery()
                 .processInstanceId(processInstance.getId())
                 .list();
@@ -78,16 +65,14 @@ public class ProcessJUnitTest {
     }
 
     @Test
-    @Deployment(resources = "TwitterQA.bpmn")
+    @Deployment(resources = {"TwitterQA.bpmn", "tweetApproval.dmn"})
     public void testRejectPath() {
         // Create a HashMap to put in variables for the process instance
         Map<String, Object> variables = new HashMap<>();
         variables.put("content", content);
+        variables.put("email","nobody@mail.com");
         // Start process with Java API and variables
         ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("TwitterQAProcess", variables);
-        // get task and reject
-        assertThat(processInstance).task().hasCandidateGroup("management").hasDefinitionKey("Activity_Review");
-        complete(task(), withVariables("approved", false));
         // Add external task handling
         assertThat(processInstance)
                 .isWaitingAt(findId("Notify rejection"))
@@ -129,7 +114,7 @@ public class ProcessJUnitTest {
 
     @Test
     @Deployment(resources = "TwitterQA.bpmn")
-    public void testSuperUserTweet() {
+    public void testSuperUserTweet() throws Exception {
         // Simple mock to bind the delegate
         Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
 
@@ -155,24 +140,33 @@ public class ProcessJUnitTest {
         assertThat(processInstance).isEnded();
     }
 
+//    @Test
+//    @Deployment(resources = "TwitterQA.bpmn")
+//    public void tweetWithdrawn() throws Exception {
+//        // Simple mock to bind the delegate
+//        Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
+//
+//        Map<String, Object> varMap = new HashMap<>();
+//        varMap.put("content", "Test tweetWithdrawn message");
+//        ProcessInstance processInstance = runtimeService()
+//                .startProcessInstanceByKey("TwitterQAProcess", varMap);
+//        assertThat(processInstance).isStarted().isWaitingAt(findId("Review Tweet"));
+//        runtimeService()
+//                .createMessageCorrelation("tweetWithdrawn")
+//                .processInstanceVariableEquals("content", "Test tweetWithdrawn message")
+//                .correlateWithResult();
+//        assertThat(processInstance)
+//                .isEnded()
+//                .hasPassedInOrder("Event_Started", "Activity_Review", "Event_Withdraw","Event_Withdrawn");
+//    }
+
     @Test
-    @Deployment(resources = "TwitterQA.bpmn")
-    public void tweetWithdrawn() {
-        // Simple mock to bind the delegate
-        Mocks.register("createTweetDelegate", new CreateTweetDelegate(mockTwitterService));
+    @Deployment(resources = "tweetApproval.dmn")
+    public void testTweetFromApproved() {
+        Map<String, Object> variables = withVariables("email", "approved@mail.com", "content", "this should be published");
+        DmnDecisionTableResult decisionResult = decisionService().evaluateDecisionTableByKey("tweetApproval", variables);
+        assertThat(decisionResult.getFirstResult()).contains(entry("approved", true));
 
-        Map<String, Object> varMap = new HashMap<>();
-        varMap.put("content", "Test tweetWithdrawn message");
-        ProcessInstance processInstance = runtimeService()
-                .startProcessInstanceByKey("TwitterQAProcess", varMap);
-        assertThat(processInstance).isStarted().isWaitingAt(findId("Review Tweet"));
-        runtimeService()
-                .createMessageCorrelation("tweetWithdrawn")
-                .processInstanceVariableEquals("content", "Test tweetWithdrawn message")
-                .correlateWithResult();
-        assertThat(processInstance)
-                .isEnded()
-                .hasPassedInOrder("Event_Started", "Activity_Review", "Event_Withdraw","Event_Withdrawn");
+
     }
-
 }

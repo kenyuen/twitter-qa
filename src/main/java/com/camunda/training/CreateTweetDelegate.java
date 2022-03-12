@@ -17,7 +17,7 @@ public class CreateTweetDelegate implements JavaDelegate {
     private TwitterService twitterService;
 
     @Inject
-    public CreateTweetDelegate(TwitterService twitterService) {
+    public CreateTweetDelegate(TwitterService twitterService) throws Exception {
         this.twitterService=twitterService;
     }
 
@@ -29,13 +29,13 @@ public class CreateTweetDelegate implements JavaDelegate {
             throw new RuntimeException("simulated network error");
         }
 
-        content = "Tj: " + content + "-" + LocalDateTime.now();
+        content = "Tj: " + content;
         LOGGER.info("Publishing tweet: " + content);
 
         // Call Service
-        TwitterService twitterService = new TwitterService();
-        twitterService.tweet(content);
-
-        // Set process variables with tweetId
+        if (this.twitterService == null) {
+            this.twitterService = new TwitterService();
+        }
+        this.twitterService.tweet(content);
     }
 }
