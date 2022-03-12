@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1rvg8ex" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <decision id="tweetApproval" name="Tweet Approval">
+    <decisionTable id="DecisionTable_1oqlreh" hitPolicy="FIRST">
+      <input id="Input_1" label="Email">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text>email</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1pzvj18" label="Content">
+        <inputExpression id="LiteralExpression_0a9qw9f" typeRef="string">
+          <text>content</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="approved" name="approved" typeRef="boolean" />
+      <rule id="DecisionRule_1v0lfh5">
+        <inputEntry id="UnaryTests_0vn803r">
+          <text>"approved@mail.com"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0i6hcnt">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0zp50u2">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1rjtjsq">
+        <inputEntry id="UnaryTests_1p32mxh">
+          <text>"nobody@mail.com"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03f4o1w">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0vs62mb">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1yxay3a">
+        <inputEntry id="UnaryTests_0dydd03">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12j0xfz">
+          <text>contains(content,"camunda rocks")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_145ewgh">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0r9u0nv">
+        <inputEntry id="UnaryTests_1lh5azo">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kd9okk">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0vdg8zc">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="tweetApproval">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
